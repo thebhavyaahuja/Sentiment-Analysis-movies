@@ -10,6 +10,7 @@ from sklearn.feature_extraction.text import CountVectorizer
 model = joblib.load('sentiment_model.pkl')
 vectorizer = joblib.load('vectorizer.pkl')  
 
+nltk.download('stopwords')
 stop_words = set(stopwords.words('english'))
 # Function to clean text
 def clean_text(text):
