@@ -3,14 +3,29 @@ import joblib
 import streamlit as st 
 import re
 import nltk
-from nltk.corpus import stopwords   
 from sklearn.feature_extraction.text import CountVectorizer     
 
 # Load the model and vectorizer
 model = joblib.load('sentiment_model.pkl')
 vectorizer = joblib.load('vectorizer.pkl')  
 
-nltk.download('stopwords')
+@st.cache_data
+def download_nltk_data():
+    try:
+        nltk.data.find('corpora/stopwords')
+    except LookupError:
+        with st.spinner('Downloading required NLTK data...'):
+            nltk.download('stopwords', quiet=True)
+    
+    try:
+        nltk.data.find('tokenizers/punkt')
+    except LookupError:
+        nltk.download('punkt', quiet=True)
+
+# Call the download function
+download_nltk_data()
+
+from nltk.corpus import stopwords
 stop_words = set(stopwords.words('english'))
 # Function to clean text
 def clean_text(text):
